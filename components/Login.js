@@ -12,6 +12,25 @@ const Login = () => {
       window.location.href = "https://tubular-pixie-bf8c9f.netlify.app/";
     }
   }, [isRedirecting]);
+  const debounce = (func, delay) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
+  const updatePassword = useCallback(
+    debounce((value) => {
+      setPassword(value);
+    }, 300), // Adjust delay as needed
+    []
+  );
+  const updateUsername = useCallback(
+    debounce((value) => {
+      setUsername(value);
+    }, 300), // Adjust delay as needed
+    []
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
@@ -48,14 +67,14 @@ const Login = () => {
             type="text"
             placeholder="Phone number, username, or email"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => updateUsername(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded "
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => updatePassword(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded "
           />
           <button
